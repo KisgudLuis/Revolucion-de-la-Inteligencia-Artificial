@@ -1,0 +1,22 @@
+Justificación de las Etiquetas Semánticas Elegidas (W3C HTML5)
+El sitio web ha sido estructurado siguiendo estrictamente el estándar de maquetación semántica propuesto por la W3C. Se evitó el uso indiscriminado de divisiones genéricas (<div>) para la macroestructura, garantizando que cada bloque responda a un propósito semántico claro que favorece la accesibilidad (lectores de pantalla) y el posicionamiento en motores de búsqueda (SEO).
+
+<!DOCTYPE html> y <html lang="es">: Declara la versión del estándar (HTML5) y define el idioma principal del documento para los agentes de usuario.
+
+<header>: Representa la cabecera del sitio web. Contiene el título principal (<h1>) y la bajada temática del informe estratégico.
+
+<nav>: Encapsula el menú de navegación principal. Agrupa una lista no ordenada (<ul> y <li>) de enlaces de anclaje (<a href="#id">) hacia cada una de las secciones internas, garantizando un mapa de navegación estructurado.
+
+<main>: Delimita el núcleo central y único del contenido de la página, diferenciándolo de cabeceras, menús y pies de página.
+
+<section>: Cada uno de los 9 ejes del informe estratégico y las galerías están delimitados por una sección con un atributo id único. Permite la navegación semántica interna y segmenta conceptualmente la información.
+
+<article>: Se utiliza dentro de las secciones compuestas (como Eje II: Muro Energético, Eje III: Dato Sintético y Mercado Laboral) para agrupar subsistemas o tarjetas con contenido independiente y autocontenido.
+
+<figure> y <figcaption>: Encapsulan los elementos multimedia del sitio (el reproductor de vídeo del podcast insertado vía <iframe> y las imágenes de la galería) vinculándolos directamente con sus descripciones o pies de foto.
+
+<table>, <thead>, <tbody>, <tr>, <th>, <td>: Se emplean exclusivamente para la presentación de datos tabulares (comparativa entre la IA Reactiva y la IA Agéntica).
+
+<blockquote> y <cite>: Utilizados para destacar las frases textuales relevantes de los ponentes y su correspondiente interpretación analítica.
+
+<footer>: Representa el pie de página global. Agrupa la información de derechos, autoría, especificaciones técnicas y el enlace externo de investigación en NotebookLM.
