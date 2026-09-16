@@ -1,22 +1,237 @@
-Justificación de las Etiquetas Semánticas Elegidas (W3C HTML5)
-El sitio web ha sido estructurado siguiendo estrictamente el estándar de maquetación semántica propuesto por la W3C. Se evitó el uso indiscriminado de divisiones genéricas (<div>) para la macroestructura, garantizando que cada bloque responda a un propósito semántico claro que favorece la accesibilidad (lectores de pantalla) y el posicionamiento en motores de búsqueda (SEO).
+Guía Explicativa del Código Completo (HTML Semántico y CSS Técnico Avanzado)
+En esta entrega, la maquetación destaca por lograr un diseño totalmente fluido, profesional y responsivo prescindiendo de clases CSS y de herramientas modernas como Flexbox o Grid. A continuación se analizan los bloques de código más significativos de la solución, dando contexto a cada técnica empleada con el código del proyecto.
 
-<!DOCTYPE html> y <html lang="es">: Declara la versión del estándar (HTML5) y define el idioma principal del documento para los agentes de usuario.
+1. Reset Profesional y Modelo de Caja Extendido
+Contexto: Para garantizar que todos los navegadores interpreten exactamente el mismo tamaño de los elementos sin descuadres visuales provocados por paddings o bordes por defecto, se utiliza un reset global que incluye pseudoelementos.
 
-<header>: Representa la cabecera del sitio web. Contiene el título principal (<h1>) y la bajada temática del informe estratégico.
+CSS
+*,
+*::before,
+*::after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+Explicación del Código:
 
-<nav>: Encapsula el menú de navegación principal. Agrupa una lista no ordenada (<ul> y <li>) de enlaces de anclaje (<a href="#id">) hacia cada una de las secciones internas, garantizando un mapa de navegación estructurado.
+*: Selecciona absolutamente todos los elementos del árbol DOM.
 
-<main>: Delimita el núcleo central y único del contenido de la página, diferenciándolo de cabeceras, menús y pies de página.
+*::before y *::after: Incluye en el comportamiento de caja a cualquier contenido generado dinámicamente mediante pseudoelementos en CSS.
 
-<section>: Cada uno de los 9 ejes del informe estratégico y las galerías están delimitados por una sección con un atributo id único. Permite la navegación semántica interna y segmenta conceptualmente la información.
+-webkit-box-sizing y -moz-box-sizing: Aportan compatibilidad previa con versiones antiguas de los motores WebKit (Safari/Chrome antiguo) y Gecko (Firefox).
 
-<article>: Se utiliza dentro de las secciones compuestas (como Eje II: Muro Energético, Eje III: Dato Sintético y Mercado Laboral) para agrupar subsistemas o tarjetas con contenido independiente y autocontenido.
+box-sizing: border-box: Redefine el modelo de caja estándar. Fuerza a que el ancho (width) y alto (height) declarados incluyan el padding y el border. Esto permite maquetar en porcentajes sin que los bordes o rellenos rompan la estructura visual al sumarse al ancho total.
 
-<figure> y <figcaption>: Encapsulan los elementos multimedia del sitio (el reproductor de vídeo del podcast insertado vía <iframe> y las imágenes de la galería) vinculándolos directamente con sus descripciones o pies de foto.
+2. Menú de Navegación Accesible y Responsivo con inline-block
+Contexto: Los elementos de lista <li> se comportan por defecto como bloques verticales (display: block). Para alinearlos horizontalmente de forma fluida sin recurrir a float ni Flexbox, se emplea la conversión a elementos en línea con propiedades de bloque.
 
-<table>, <thead>, <tbody>, <tr>, <th>, <td>: Se emplean exclusivamente para la presentación de datos tabulares (comparativa entre la IA Reactiva y la IA Agéntica).
+HTML
+<nav>
+    <ul>
+        <li><a href="#resumen">Resumen</a></li>
+        <li><a href="#temas">Ejes Temáticos</a></li>
+        <li><a href="#arsenal">Arsenal Digital</a></li>
+        <li><a href="#zonagris">Zona Gris</a></li>
+        <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#galeria">Galería Visual</a></li>
+        <li><a href="https://gemini.google.com/notebook/e805e9c1-a967-482c-816e-4a868ed2224f" target="_blank" rel="noopener">NotebookLM</a></li>
+    </ul>
+</nav>
+CSS
+nav li {
+    display: inline-block;
+    margin: 0 0.8%;
+}
 
-<blockquote> y <cite>: Utilizados para destacar las frases textuales relevantes de los ponentes y su correspondiente interpretación analítica.
+nav a {
+    display: block;
+    padding: 10px 16px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: 500;
+    border-radius: 4px;
+}
 
-<footer>: Representa el pie de página global. Agrupa la información de derechos, autoría, especificaciones técnicas y el enlace externo de investigación en NotebookLM.
+nav a:hover,
+nav a:focus {
+    background-color: var(--secondary-color);
+    color: var(--accent-color);
+}
+Explicación del Código:
+
+display: inline-block: Convierte las etiquetas <li> en elementos fluidos horizontales que preservan las propiedades de caja (permitiendo asignar márgenes porcentuales y rellenos).
+
+target="_blank" y rel="noopener": En el HTML, abre los enlaces externos a cuadernos de NotebookLM en una nueva pestaña sin permitir que la pestaña de destino tome control del contexto de ejecución (tabnabbing protection).
+
+nav a:focus: Garantiza accesibilidad web (WCAG) al resaltar visualmente los elementos cuando un usuario navega por la interfaz usando la tecla Tab.
+
+3. Vídeo Aspect Ratio 16:9 Fluido (Técnica "Padding Bottom Hack")
+Contexto: Los elementos <iframe> de servicios como YouTube no se ajustan de manera fluida al ancho de pantalla por defecto; fijar píxeles estáticos rompe el diseño en pantallas pequeñas. Para resolverlo de forma responsiva sin JavaScript, se aplica una técnica de proporción matemática en CSS.
+
+HTML
+<section id="podcast">
+    <h2>Análisis Multimedia de la Ciberguerra</h2>
+    <figure>
+        <div>
+            <iframe 
+                src="https://www.youtube-nocookie.com/embed/IwaF7-COu1c" 
+                title="Universo, IA y el Destino del Ser Humano"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <figcaption>Episodio sobre IA, Geopolítica y Ciberdefensa - Canal Aladetres.</figcaption>
+    </figure>
+</section>
+CSS
+section#podcast figure div {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+    height: 0;
+    overflow: hidden;
+    background-color: #000000;
+}
+
+section#podcast iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+Explicación del Código:
+
+padding-bottom: 56.25%: En la especificación CSS, el porcentaje de padding vertical se calcula en relación con el ancho del elemento contenedor. La relación de aspecto estándar de vídeo de alta definición es 16:9, cuya proporción se obtiene dividiendo 9 entre 16 (9÷16=0.5625, es decir, 56.25%). Esto fuerza al contenedor a mantener la altura proporcional exacta según el ancho disponible en la pantalla.
+
+height: 0 y overflow: hidden: Colapsan la altura interna del div para que su volumen espacial responda exclusivamente al cálculo del relleno vertical.
+
+position: absolute en el iframe: Permite estirar dinámicamente el reproductor de vídeo para que ocupe el 100% del alto y ancho de la caja adaptativa.
+
+4. Sistema de Maquetación en 3 Columnas sin Clases (float + %)
+Contexto: La sección #temas (así como la sección #zonagris) divide la información en tres columnas independientes de igual anchura empleando la etiqueta semántica <article> sin añadir nombres de clases personalizadas.
+
+HTML
+<section id="temas">
+    <h2>Vulnerabilidad Crítica en Infraestructuras</h2>
+    <article>
+        <h3>1. Redes Eléctricas y Agua</h3>
+        <p>Ataques dirigidos a sistemas SCADA y control industrial...</p>
+    </article>
+    <article>
+        <h3>2. Espionaje en Redes 5G</h3>
+        <p>Infiltración silenciosa en nodos de telecomunicaciones globales...</p>
+    </article>
+    <article>
+        <h3>3. Malware de Estado</h3>
+        <p>Desarrollo de ciberarmas autónomas con capacidad mutante...</p>
+    </article>
+</section>
+CSS
+section#temas article {
+    float: left;
+    width: 31.333%;
+    margin-right: 2%;
+    background-color: #ffffff;
+    padding: 1.8%;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    border-top: 4px solid var(--primary-dark);
+    min-height: 280px;
+    margin-bottom: 1.5rem;
+}
+
+section#temas article:last-child {
+    margin-right: 0;
+}
+Explicación del Código:
+
+Cálculo de Ancho: Tres columnas de 31.333% suman 93.999%. Dos márgenes derechos intermedios de 2% suman un 4%. La suma total da 97.999%, dejando aproximadamente un 2% de tolerancia para evitar imprecisiones por redondeo de píxeles en los navegadores que provocarían la caída de la última columna.
+
+article:last-child: Selecciona automáticamente el tercer y último <article> dentro de la sección y remueve su margen derecho (margin-right: 0), logrando que la columna encaje al ras del borde del contenedor.
+
+5. Galería Cuadriculada (2x2) mediante Pseudoclase :nth-of-type(even)
+Contexto: En la sección #galeria se presentan 4 elementos visuales. Se requiere acomodarlos en una cuadrícula responsiva de dos columnas y dos filas sin asignar clases para indicar el fin de cada fila.
+
+HTML
+<section id="galeria">
+    <h2>Galería Visual del Conflicto Digital</h2>
+    <figure>
+        <img src="img/infraestructura.jpg" alt="Centro de Operaciones de Ciberdefensa">
+        <figcaption>Centro de control de ciberdefensa en tiempo real.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/codigo.jpg" alt="Líneas de Código de Exploit">
+        <figcaption>Análisis forense de código malicioso de nivel estatal.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/servidores.jpg" alt="Granja de Servidores Sanitizada">
+        <figcaption>Servidores seguros de infraestructura crítica.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/mapa-ataques.jpg" alt="Mapa de Ataques Globales">
+        <figcaption>Monitoreo global de ciberataques en tiempo real.</figcaption>
+    </figure>
+</section>
+CSS
+section#galeria figure {
+    float: left;
+    width: 48.5%;
+    margin-right: 3%;
+    margin-bottom: 2rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+section#galeria figure:nth-of-type(even) {
+    margin-right: 0;
+}
+Explicación del Código:
+
+Cálculo Porcentual: Cada tarjeta ocupa un 48.5% de ancho. Dos columnas adyacentes suman 97%, que combinadas con un 3% de margen intermedio completan el 100% del ancho utilizable de la fila.
+
+figure:nth-of-type(even): Selecciona automáticamente los elementos pares (el 2º y el 4º elemento <figure>) y les retira el margen derecho. Esto fuerza al 3º elemento a saltar limpiamente a la siguiente fila sin desalinear la cuadrícula.
+
+6. Mecanismo Automático de Limpieza de Flotantes (Clearfix con Pseudoelemento)
+Contexto: Cuando los elementos hijos (<article> o <figure>) utilizan la propiedad float: left, abandonan el flujo normal del documento. Esto causa que la etiqueta padre (<section>) colapse su altura a 0px, haciendo que el fondo de la sección desaparezca y los elementos inferiores se solapen.
+
+CSS
+section::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+Explicación del Código:
+
+section::after: Inyecta automáticamente un pseudoelemento al final de cada <section> en la estructura del documento.
+
+display: table y clear: both: Obligan a este pseudoelemento invisible a posicionarse por debajo de todos los elementos flotados previamente. Esto restaura la altura natural del contenedor padre para que abarque correctamente el espacio de todos sus artículos e imágenes internas.
+
+7. Estructura de Cierre y Pie de Página Semántico
+Contexto: El elemento <footer> cierra el documento incorporando los créditos del autor, derechos de autor y enlaces a repositorios o fuentes externas, manteniendo el estándar de maquetación semántica.
+
+HTML
+<footer>
+    <p>&copy; 2026 Ciberguerra y Seguridad Digital. Todos los derechos reservados.</p>
+    <p>Diseñado con HTML5 Semántico y CSS Técnico Avanzado.</p>
+</footer>
+CSS
+footer {
+    clear: both;
+    text-align: center;
+    padding: 2rem 1rem;
+    background-color: var(--primary-dark);
+    color: #ffffff;
+    margin-top: 2rem;
+    border-top: 4px solid var(--accent-color);
+}
+Explicación del Código:
+
+clear: both: Actúa como una barrera de seguridad adicional asegurando que el pie de página nunca se monte sobre elementos flotados previos en la página.
+
+var(--primary-dark) y var(--accent-color): Hace uso de variables CSS personalizadas para mantener una consistencia visual unificada en la paleta de colores del proyecto.
